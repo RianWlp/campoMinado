@@ -2,44 +2,20 @@
 #include <vector>
 using namespace std;
 
-// Regras campo minado
+// Funções possivelmente uteis
+void randomizarBombas(){}
+void montarMapa(){}
+void mostrarBombas() {}
+void mostrarMapa() {}
 
-/**
-O Campo Minado é um jogo clássico de lógica, onde o objetivo é revelar todas as células seguras de um tabuleiro sem clicar em uma mina. Aqui estão as regras principais:
+// https://stackoverflow.com/questions/12375591/vector-of-vectors-to-create-matrix
 
-Regras do Campo Minado
-Tabuleiro:
+int main(int argc, char *argv[])
+{
+    vector<vector<char> > mapa;
 
-O jogo ocorre em uma grade (geralmente quadrada) de células ocultas.
-
-Algumas dessas células contêm minas, outras estão vazias.
-
-- Objetivo:
-Revelar todas as células que não contêm minas.
-Se você revelar todas as células seguras, você vence o jogo.
-
-- Como jogar:
-O jogador clica em uma célula para revelá-la.
-Se a célula contiver uma mina, o jogo termina e o jogador perde.
-Se a célula estiver vazia, um número pode aparecer, indicando quantas minas existem nas células adjacentes (horizontais, verticais e diagonais).
-Se a célula não tiver minas ao redor (número 0), todas as células vizinhas são automaticamente reveladas.
-
-- Marcando minas:
-O jogador pode marcar células onde acredita que há minas usando uma bandeira.
-Isso ajuda a evitar cliques acidentais em minas.
-
-- Vitória e Derrota:
-Vitória: O jogador vence ao revelar todas as células seguras, sem tocar em nenhuma mina.
-Derrota: O jogo termina imediatamente se o jogador clicar em uma mina.
-
-- Dicas e Estratégias:
-O primeiro clique nunca será uma mina.
-Use os números revelados para deduzir onde estão as minas.
-Marque as minas suspeitas com bandeiras para não esquecê-las.
-Se houver incerteza, tente minimizar os riscos ao escolher uma célula para revelar.
-
-Essas são as regras básicas do jogo, mas algumas variações incluem tabuleiros maiores, diferentes quantidades de minas e modos de dificuldade variados.e
-*/
+    return 0;
+}
 
 int randomizarValor()
 {
@@ -80,7 +56,7 @@ int main(int argc, char *argv[])
             listarPontuacoes(pontuacoes);
             break;
         case (3):
-            tamanho = (pontuacoes.end() - pontuacoes.begin()) -1;
+            tamanho = (pontuacoes.end() - pontuacoes.begin()) - 1;
             cout << "A sua última pontuação foi de " << pontuacoes[tamanho];
             break;
         case (4):
