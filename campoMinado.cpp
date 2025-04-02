@@ -2,25 +2,68 @@
 #include <vector>
 using namespace std;
 
-// Funções possivelmente uteis
-void randomizarBombas(){}
-void montarMapa(){}
-void mostrarBombas() {}
-void mostrarMapa() {}
-
 // https://stackoverflow.com/questions/12375591/vector-of-vectors-to-create-matrix
+struct mapa
+{
+    vector<vector<char>> grid;
+    int sizeGrid;
+    int quantidadeBombas;
+};
+
+int randomizarValor(int range)
+{
+    return rand() % range + 1;
+}
+
+// mapa randomizarBombas(int quantidadeBombas, int tamanhoMapa, vector<vector<char>> mapa)
+mapa randomizarBombas(mapa mapa)
+{
+    int x,
+        y;
+    for (int i = 0; i < mapa.quantidadeBombas; i++)
+    {
+        // Garante que a posição gerada não tenha uma bomba já
+        do
+        {
+            x = randomizarValor(mapa.sizeGrid);
+            y = randomizarValor(mapa.sizeGrid);
+        } while (x == mapa.sizeGrid || y == mapa.sizeGrid);
+        mapa.grid[x][y] = '*';
+    }
+    return mapa;
+}
+
+// void exibirMapa(vector<vector<char>> mapa)
+void exibirMapa(mapa mapa)
+{
+    // Sempre vai ser quadrado 10x10, 20x20 ex.
+    // int tamanhoMapa = mapa.grid.size();
+    for (int i = 0; i < mapa.sizeGrid; i++)
+    {
+        for (int j = 0; j < mapa.sizeGrid; j++)
+        {
+            cout << mapa.grid[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+
+void mostrarBombas() {}
 
 int main(int argc, char *argv[])
 {
-    vector<vector<char> > mapa;
-
-    return 0;
-}
-
-int randomizarValor()
-{
     srand(time(NULL));
-    return rand() % 100 + 1;
+    cout << "Bem vindo ao campo minado em C++" << endl;
+    // cout << "Informe o tamanho o mapa desejado" << endl;
+    mapa mapa;
+    mapa.quantidadeBombas = 40;
+    mapa.sizeGrid         = 40;
+
+    // Inicializa o mapa com apenas zeros (0)
+    mapa.grid = vector<vector<char>>(mapa.sizeGrid, vector<char>(mapa.sizeGrid, '0'));
+
+    mapa = randomizarBombas(mapa);
+    exibirMapa(mapa);
 }
 
 void listarPontuacoes(vector<int> pontuacoes)
@@ -29,51 +72,4 @@ void listarPontuacoes(vector<int> pontuacoes)
     {
         cout << "Código da pontuação: " << i << " Pontuação: " << pontuacoes[i] << "\n";
     }
-}
-
-int main(int argc, char *argv[])
-{
-    int opcao;
-    int tamanho;
-    vector<int> pontuacoes = {1, 4, 2, 3};
-
-    do
-    {
-        cout
-            << "\nEscolha uma opção:\n"
-            << "1. Jogar\n"
-            << "2. Ver histório de pontuações\n"
-            << "3. Ver última pontuação\n"
-            << "4. Remover pontuação deseja\n";
-
-        cin >> opcao;
-        switch (opcao)
-        {
-        case (1):
-            pontuacoes.push_back(randomizarValor());
-            break;
-        case (2):
-            listarPontuacoes(pontuacoes);
-            break;
-        case (3):
-            tamanho = (pontuacoes.end() - pontuacoes.begin()) - 1;
-            cout << "A sua última pontuação foi de " << pontuacoes[tamanho];
-            break;
-        case (4):
-            int index;
-            cout << "Escolha qual pontuação você deseja remover\n";
-            cin >> index;
-            if (pontuacoes[index])
-            {
-                pontuacoes.erase(pontuacoes.begin() + index);
-                cout << "A pontuação de código " << index << " foi excluída\n";
-            }
-            break;
-        default:
-            cout << "Opção selecionada inválida, tente novamente\n";
-            break;
-        }
-
-    } while (opcao != 5);
-    return 0;
 }
