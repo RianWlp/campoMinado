@@ -8,6 +8,7 @@ struct mapa
     vector<vector<char>> grid;
     int sizeGrid;
     int quantidadeBombas;
+    vector<vector<char>> coordenadasBombas;
 };
 
 int randomizarValor(int range)
@@ -28,27 +29,60 @@ mapa randomizarBombas(mapa mapa)
             x = randomizarValor(mapa.sizeGrid);
             y = randomizarValor(mapa.sizeGrid);
         } while (x == mapa.sizeGrid || y == mapa.sizeGrid);
-        mapa.grid[x][y] = '*';
+        mapa.coordenadasBombas[x][y] = '*';
+        // mapa.grid[x][y] = '*';
     }
     return mapa;
 }
 
-// void exibirMapa(vector<vector<char>> mapa)
 void exibirMapa(mapa mapa)
 {
     // Sempre vai ser quadrado 10x10, 20x20 ex.
+
+    // for (int i = 0; i < mapa.sizeGrid; i++)
+    // {
+    //     cout << i << " ";
+    // }
+
+    cout << endl << endl;
     // int tamanhoMapa = mapa.grid.size();
+
+    // std::string espacos = "";
     for (int i = 0; i < mapa.sizeGrid; i++)
     {
+        // espacos = i+"";
+        // cout << espacos.length() << "    ";
+        // cout << espacos << " ";
+
+        // Isso precisa ser dinamico
+        if (i > 9)
+        {
+            cout << i << " ";
+        }
+        else
+        {
+            cout << i << "  ";
+        }
+
         for (int j = 0; j < mapa.sizeGrid; j++)
         {
+            // cout << j << " ";
             cout << mapa.grid[i][j] << " ";
+            // cout << mapa.grid[i][j] << "  ";
         }
         cout << endl;
     }
 }
 
+void validarCoordenadaBomba () {
+
+    // Vai cruzar a grid com as coordenadas das bombas no mapa
+}
+
 void mostrarBombas() {}
+
+// Instalar o ncursors no Linux, ele pode resolver o problema dos Index
+// sudo apt-get install libncurses5-dev libncursesw5-dev
 
 int main(int argc, char *argv[])
 {
@@ -57,10 +91,11 @@ int main(int argc, char *argv[])
     // cout << "Informe o tamanho o mapa desejado" << endl;
     mapa mapa;
     mapa.quantidadeBombas = 40;
-    mapa.sizeGrid         = 40;
+    mapa.sizeGrid = 40;
 
     // Inicializa o mapa com apenas zeros (0)
-    mapa.grid = vector<vector<char>>(mapa.sizeGrid, vector<char>(mapa.sizeGrid, '0'));
+    mapa.grid              = vector<vector<char>>(mapa.sizeGrid, vector<char>(mapa.sizeGrid, '0'));
+    mapa.coordenadasBombas = vector<vector<char>>(mapa.sizeGrid, vector<char>(mapa.sizeGrid, '0'));
 
     mapa = randomizarBombas(mapa);
     exibirMapa(mapa);
