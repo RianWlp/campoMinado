@@ -15,6 +15,22 @@ struct mapa
     vector<vector<char>> coordsBombas;
 };
 
+void exibirLogs(vector<string> logs, mapa mapa)
+{
+    for (size_t i = 0; i < logs.size(); ++i)
+    {
+        mvprintw(i + 1, mapa.tamanhoMapa * 2, "- %s", logs[i].c_str());
+        // if (i > 20) {
+        //     for (size_t i = 0; i < vetorLogs.size(); ++i)
+        //     {
+        //         mvprintw(i + 1, mapa.tamanhoMapa * 2, " ");
+        //     }
+        //     // mvprintw(i + 1, mapa.tamanhoMapa * 2, " ");
+        // }
+    }
+    refresh();
+}
+
 void exibirMapa(mapa mapa)
 {
     cout << endl
@@ -94,8 +110,7 @@ int main(int argc, char *argv[])
     mapa.tamanhoMapa = 40;
 
     // Inicializa o mapa com apenas zeros (0)
-    // mapa.mapa = vector<vector<char>>(mapa.tamanhoMapa, vector<char>(mapa.tamanhoMapa, '0'));
-    mapa.coordsBombas = vector<vector<char>>(mapa.tamanhoMapa, vector<char>(mapa.tamanhoMapa, 'X'));
+    mapa.coordsBombas = vector<vector<char>>(mapa.tamanhoMapa, vector<char>(mapa.tamanhoMapa, '0'));
 
     int ch,
         y = 0,
@@ -105,37 +120,25 @@ int main(int argc, char *argv[])
     bool primeiroClick = false;
     vector<string> vetorLogs;
 
-    clear();
     do
     {
         log = "";
-        if ((ch == KEY_ENTER) || (ch == '\n') && !primeiroClick)
-        {
-            mapa = randomizarBombas(mapa);
-            // for (int i = 0; i < mapa.tamanhoMapa; i++)
-            // {
-            //     for (int j = 0; j < mapa.tamanhoMapa; j++)
-            //     {
-            //         if (mapa.coordsBombas[i][j] == '*')
-            //         {
-            //             mvprintw(i + 1, mapa.tamanhoMapa * 2, "- i: %d j: %d", i, j);
-            //         }
-            //     }
-            // }
-
-            // exibirMapa(mapa);
-            primeiroClick = true;
-        }
 
         if ((ch == KEY_ENTER) || (ch == '\n'))
         {
+            primeiroClick = true;
+            // Vai dividir por dois por conta dos espacos postos no mapa (Gambirra)
             int metadeX = x / 2;
 
-            // Vai dividir por dois por conta dos espacos postos no mapa (Gambirra)
-            log = string("ASCII: ") + to_string(metadeX) + " " + to_string(y);
-            vetorLogs.push_back(log);
-            log = string("Valor da posicao bomba ") + mapa.coordsBombas[metadeX][y] + to_string(mapa.coordsBombas[metadeX][y] == '*');
-            vetorLogs.push_back(log);
+            vetorLogs.push_back(string("ASCII: ") + to_string(metadeX) + " " + to_string(y));
+            vetorLogs.push_back(string("Valor da posicao pressionada: ") + mapa.coordsBombas[metadeX][y] + " | Bomba? " + (mapa.coordsBombas[metadeX][y] == '*' ? "Sim" : "Não"));
+
+            if (vetorLogs.size() > 20)
+            {
+                vetorLogs.erase(vetorLogs.begin());
+                // vetorLogs.clear();
+                // vetorLogs.erase(vetorLogs.end());
+            }
 
             if (mapa.coordsBombas[metadeX][y] == '*')
             {
@@ -159,26 +162,27 @@ int main(int argc, char *argv[])
                 // exit(0);
             }
         }
-
-        // O ch é o código da tecla pressionada
-
-        switch (ch)
+        else if (ch == KEY_UP)
         {
-        case KEY_UP:
             y--;
-            break;
-        case KEY_DOWN:
+        }
+        else if (ch == KEY_DOWN)
+        {
             y++;
-            break;
-        case KEY_LEFT:
+        }
+        else if (ch == KEY_LEFT)
+        {
             x--;
-            break;
-        case KEY_RIGHT:
+        }
+        else if (ch == KEY_RIGHT)
+        {
             x++;
-            break;
+        }
+        else if (!primeiroClick)
+        {
+            mapa = randomizarBombas(mapa);
         }
 
-        // vetorLogs.push_back(log);
         for (int xM = 0; xM < mapa.tamanhoMapa; xM++)
         {
             for (int yM = 0; yM < mapa.tamanhoMapa; yM++)
@@ -192,19 +196,7 @@ int main(int argc, char *argv[])
         mvprintw(y, x, "@"); // Imprime o caractere na nova posição
         refresh();
 
-        for (size_t i = 0; i < vetorLogs.size(); ++i)
-        {
-            mvprintw(i + 1, mapa.tamanhoMapa * 2, "- %s", vetorLogs[i].c_str());
-            // if (i > 20) {
-
-            //     for (size_t i = 0; i < vetorLogs.size(); ++i)
-            //     {
-            //         mvprintw(i + 1, mapa.tamanhoMapa * 2, " ");
-            //     }
-            //     // mvprintw(i + 1, mapa.tamanhoMapa * 2, " ");
-            // }
-        }
-        refresh();
+        exibirLogs(vetorLogs, mapa);
 
         // Sai com a tecla 'q')
     } while ((ch = getch()) != 'q');
