@@ -29,8 +29,8 @@ mapa randomizarBombas(mapa mapa)
             x = randomizarValor(mapa.sizeGrid);
             y = randomizarValor(mapa.sizeGrid);
         } while (x == mapa.sizeGrid || y == mapa.sizeGrid);
-        mapa.coordenadasBombas[x][y] = '*';
-        // mapa.grid[x][y] = '*';
+        // mapa.coordenadasBombas[x][y] = '*';
+        mapa.grid[x][y] = '*';
     }
     return mapa;
 }
