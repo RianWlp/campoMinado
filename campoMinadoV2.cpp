@@ -20,13 +20,6 @@ void exibirLogs(vector<string> logs, mapa mapa)
     for (size_t i = 0; i < logs.size(); ++i)
     {
         mvprintw(i + 1, mapa.tamanhoMapa * 2, "- %s", logs[i].c_str());
-        // if (i > 20) {
-        //     for (size_t i = 0; i < vetorLogs.size(); ++i)
-        //     {
-        //         mvprintw(i + 1, mapa.tamanhoMapa * 2, " ");
-        //     }
-        //     // mvprintw(i + 1, mapa.tamanhoMapa * 2, " ");
-        // }
     }
     refresh();
 }
@@ -92,16 +85,48 @@ mapa randomizarBombas(mapa mapa)
     return mapa;
 }
 
+// Precisa ser testada
+void calcularBombas (mapa mapa) {
+
+    int x,
+        y;
+
+    for (int i = 0; i < mapa.tamanhoMapa; i++)
+    {
+        for (int j = 0; j < mapa.tamanhoMapa; j++)
+        {
+            if (mapa.coordsBombas[i][j] == '*')
+            {
+                // Verifica as posições adjacentes
+                for (int x = -1; x <= 1; x++)
+                {
+                    for (int y = -1; y <= 1; y++)
+                    {
+                        if (i + x >= 0 && i + x < mapa.tamanhoMapa && j + y >= 0 && j + y < mapa.tamanhoMapa)
+                        {
+                            if (mapa.coordsBombas[i + x][j + y] != '*')
+                            {
+                                mapa.coordsBombas[i + x][j + y]++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 int main(int argc, char *argv[])
 {
+    // Proximo passo vai ser liberar o mapa apos a posicao que nao (e) uma bomba ser pressionada
     srand(time(NULL));
 
     // Inicializa o ncurses
-    initscr();            // Começa a janela ncurses
-    cbreak();             // Desabilita o buffering de linha
-    noecho();             // Não mostra as teclas digitadas
-    keypad(stdscr, TRUE); // Habilita teclas como setas
-    curs_set(0);          // Esconde o cursor
+    // initscr();            // Começa a janela ncurses
+    // cbreak();             // Desabilita o buffering de linha
+    // noecho();             // Não mostra as teclas digitadas
+    // keypad(stdscr, TRUE); // Habilita teclas como setas
+    // curs_set(0);          // Esconde o cursor
 
     cout << "Bem vindo ao campo minado em C++" << endl;
     // cout << "Informe o tamanho o mapa desejado" << endl;
@@ -112,13 +137,18 @@ int main(int argc, char *argv[])
     // Inicializa o mapa com apenas zeros (0)
     mapa.coordsBombas = vector<vector<char>>(mapa.tamanhoMapa, vector<char>(mapa.tamanhoMapa, '0'));
 
-    int ch,
+    int ch = 0,
         y = 0,
         x = 0;
 
     string log;
     bool primeiroClick = false;
     vector<string> vetorLogs;
+
+    mapa = randomizarBombas(mapa);
+    exibirMapa(mapa);
+
+    return 0;
 
     do
     {
@@ -130,7 +160,7 @@ int main(int argc, char *argv[])
             // Vai dividir por dois por conta dos espacos postos no mapa (Gambirra)
             int metadeX = x / 2;
 
-            vetorLogs.push_back(string("ASCII: ") + to_string(metadeX) + " " + to_string(y));
+            vetorLogs.push_back(string("ASCII ->> ") + "C:" + to_string(metadeX) + " L:" + to_string(y));
             vetorLogs.push_back(string("Valor da posicao pressionada: ") + mapa.coordsBombas[metadeX][y] + " | Bomba? " + (mapa.coordsBombas[metadeX][y] == '*' ? "Sim" : "Não"));
 
             if (vetorLogs.size() > 20)
@@ -159,7 +189,7 @@ int main(int argc, char *argv[])
                 refresh();
                 getch();
                 endwin();
-                // exit(0);
+                exit(0);
             }
         }
         else if (ch == KEY_UP)
@@ -183,6 +213,7 @@ int main(int argc, char *argv[])
             mapa = randomizarBombas(mapa);
         }
 
+        // Antes de andar valida se a proxima posicao (e) uma bomba
         for (int xM = 0; xM < mapa.tamanhoMapa; xM++)
         {
             for (int yM = 0; yM < mapa.tamanhoMapa; yM++)
