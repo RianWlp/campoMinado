@@ -43,6 +43,26 @@ Opcionalmente, o jogador pode marcar qualquer quadrado que acredita que contém 
 - Marque as minas suspeitas com bandeiras para não esquecê-las.
 - Se houver incerteza, tente minimizar os riscos ao escolher uma célula para revelar.
 
+
+### Visualização em profundidade (quando a célula é 0):
+- Esse processo é chamado de expansão em profundidade ou flood fill.
+- A célula 0 é revelada.
+- Todas as células adjacentes (8 ao redor) também são reveladas.
+- Se uma dessas também for 0, o processo se repete: revela ela e os vizinhos dela.
+- Se uma dessas for um número (1 a 8), ela é revelada, mas não gera nova expansão.
+
+Antes do clique:
+? ? ? ? ?
+? ? ? ? ?
+? ? 0 ? ?
+? ? ? ? ?
+? ? ? ? ?
+
+Depois do clique no "0":
+1 1 1
+1 0 1
+1 1 1
+
 ---
 
 ## Compilação do projeto
@@ -53,3 +73,7 @@ Para compilar múltiplos arquivos `.cpp` ao mesmo tempo, use o comando:
 g++ *.cpp -o campoMinado
 g++ arquivo1.cpp arquivo2.cpp arquivo3.cpp -o campoMinado
 ./campoMinado
+
+
+
+
